@@ -1,0 +1,64 @@
+version: "3"
+
+services:
+  # Serviço que irá rodar o node
+  node:
+    # Imagem base do container
+    image: node:16.14
+    # Nome do container para facilitar execução
+    container_name: sales_manager
+    # Mesmo que `docker run -t`
+    tty: true
+    # Mesmo que `docker run -i`
+    stdin_open: true
+    # Substitui o comando padrão da imagem do node
+    command: bash # você pode subistituir `bash` por `npm run dev` para iniciar a API quando container for iniciado  
+    # Restarta a imagem caso algo a faça parar
+    restart: always
+    # Diretório padrão de execução
+    working_dir: /app
+    # Lista de volumes (diretórios) mapeados de fora para dentro do container
+    volumes:
+      # Monta o diretório atual, com todos os dados do projeto, 
+      # dentro do diretório /app
+      - ./:/app
+    # Lista de serviços do qual este serviço depende
+    depends_on:
+      # Precisa do banco funcionando antes de subir o node
+      - database
+    # Lista de portas mapeadas de dentro para fora do container
+    # na notação porta_de_fora:porta_de_dentro
+    ports:
+      # Expõe a porta padrão da aplicação: altere aqui caso use outra porta
+      - 3001:3001
+    # Configura as variáveis de ambiente dentro do container
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: database # Nome do service logo abaixo
+      PORT: '3001'
+      HOST: sales_manager
+    networks:
+      # Conecta esse serviço com a rede que criada
+      - sales_manager_net
+
+  # Serviço que irá rodar o banco de dados
+  database:
+    container_name: sales_manager_db
+    image: mysql:8.0.32
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # Garanta que não haverá conflitos de porta com um banco que esteja
+      # rodando localmente
+      - 3306:3306
+    networks:
+      # Conecta esse serviço com a rede que criada 
+      - sales_manager_net
+
+# Lista de redes que os containeres irão utilizar
+networks:
+  # Cria a rede que conecta os serviços `db` e `node` 
+  sales_manager_net:
+    # Específica o drive da rede
+    driver: bridge
