@@ -1,7 +1,8 @@
 <h1>
 Aula de Arquitetura de Software: CRUD com Camadas Model, Service e Controller
-Este repositório contém os recursos necessários para uma aula prática de Arquitetura de Software, com foco na implementação de um CRUD (Create, Read, Update, Delete) utilizando uma arquitetura de camadas Model, Service e Controller.
 </h1>
+
+<p>Este repositório contém os recursos necessários para uma aula prática de Arquitetura de Software, com foco na implementação de um CRUD (Create, Read, Update, Delete) utilizando uma arquitetura de camadas Model, Service e Controller.</p>
 
 <h1>Visão Geral</h1>
 
